@@ -1,7 +1,7 @@
 /* Ensure the size of the image fit the container perfectly */
-img {
+canvas, img {
     display: block;
     /* This rule is very important, please don't ignore this */
-    max-width: 100\%;
+    max-width: 100%;
     height: 90%;
   }
