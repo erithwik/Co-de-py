@@ -35,7 +35,12 @@ function setScreenshotUrl(url) {
     // add a listener here s.t. when enter is clicked, you export it...
     document.getElementById("send-button").onclick = function () {
       data = cropper.getCroppedCanvas().toDataURL('image/png');
-      fetch(`https://localhost:5000/image/${data}`)
+      // console.log(data)
+      fetch(`http://localhost:5000/image`, {
+        method: "POST",
+        body: JSON.stringify({ "image": data }),
+        mode: "no-cors",
+      })
         .then(response => response.json())
         .then(function (data) {
           console.log(data)
