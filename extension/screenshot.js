@@ -1,8 +1,4 @@
 function scaleToFit(canvas, ctx, img) {
-  console.log("canvas height: " + canvas.height)
-  console.log("canvas width: " + canvas.width)
-  console.log("image height: " + img.height)
-  console.log("image width: " + img.width)
   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
   var x = (canvas.width / 2) - (img.width / 2) * scale;
   var y = (canvas.height / 2) - (img.height / 2) * scale;
@@ -22,15 +18,7 @@ function setScreenshotUrl(url) {
     context.imageSmoothingEnabled = false;
     scaleToFit(canvas, context, image)
     const cropper = new Cropper(canvas, {
-      crop(event) {
-        console.log(event.detail.x);
-        console.log(event.detail.y);
-        console.log(event.detail.width);
-        console.log(event.detail.height);
-        console.log(event.detail.rotate);
-        console.log(event.detail.scaleX);
-        console.log(event.detail.scaleY);
-      },
+      crop(event) { },
     });
     // add a listener here s.t. when enter is clicked, you export it...
     document.getElementById("send-button").onclick = function () {
@@ -39,7 +27,10 @@ function setScreenshotUrl(url) {
       fetch(`http://localhost:5000/image`, {
         method: "POST",
         body: JSON.stringify({ "image": data }),
-        mode: "no-cors",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json',
+        }
       })
         .then(response => response.json())
         .then(function (data) {

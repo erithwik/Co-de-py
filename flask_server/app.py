@@ -29,9 +29,7 @@ def save_text():
     output = subprocess.run(
         ["tesseract", "image." + file_ext, "stdout"], capture_output=True, text=True)
     # return output
-    ret = jsonify({"code": str(output.stdout)})
-    print({"code": str(output.stdout)}, file=sys.stderr)
-    return ret
+    return jsonify({"code": str(output.stdout)})
 
 
 @ app.route("/code/<code>", methods=["GET"])
