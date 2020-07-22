@@ -1,0 +1,17 @@
+{
+    "manifest_version": 2,
+    "name": "PhotoCopy",
+    "description": "Copies the code (or text) inside a screenshot",
+    "version": "0.1",
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": false
+    },
+    "permissions": [
+        "contextMenus",
+        "tabs",
+        "activeTab"
+    ]
+}
