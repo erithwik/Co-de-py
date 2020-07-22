@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify
-import pytesseract
-from PIL import Image
+from flask_cors import CORS
+import sys
 import subprocess
+import base64
 
 # pytesseract.pytesseract.tesseract_cmd = r'/usr/local/Cellar/tesseract/4.1.1'
 
@@ -11,28 +12,30 @@ import subprocess
 #     '/Users/ricky/Desktop/test.png'), config=custom_config))
 
 app = Flask(__name__)
+CORS(app)
 
 
-@app.route("/image", methods=["GET"])
+@app.route("/image", methods=["GET", "POST"])
 def save_text():
-    # get image
-    data["image"] = request.get_json()
+    image = request.get_json(force=True)
+    image = image["image"]
     # save image as temp.png
-
+    head, data = image.split(',', 1)
+    file_ext = head.split(';')[0].split('/')[1]
+    plain_data = base64.urlsafe_b64decode(data)
+    with open('image.' + file_ext, 'wb') as f:
+        f.write(plain_data)
     # store the text
     output = subprocess.run(
-        ["tesseract", "temp.png", "stdout"], capture_output=True)
-    # delete the image
-    subprocess.run(["rm", "temp.png"])
+        ["tesseract", "image." + file_ext, "stdout"], capture_output=True, text=True)
     # return output
-    return jsonify(output)
+    ret = jsonify({"code": str(output.stdout)})
+    print({"code": str(output.stdout)}, file=sys.stderr)
+    return ret
 
 
-@app.route("/code", methods=["GET"])
-def run_code():
-    # get the text in string format
-    data = request.get_json()
-    text = data["text"]
+@ app.route("/code/<code>", methods=["GET"])
+def run_code(code):
     # save the text
     with open("temp.cpp", "w") as f:
         f.write(text)
@@ -44,9 +47,10 @@ def run_code():
 
 
 if __name__ == "__main__":
-    subprocess.run(
-        ["tesseract", "temp.png", "temp"])
-    subprocess.run(["mv", "temp.txt", "temp.cpp"])
-    subprocess.run(["make", "temp"])
-    out = subprocess.run(["./temp"], capture_output=True)
-    print(out.stdout.decode())
+    # subprocess.run(
+    #     ["tesseract", "temp.png", "temp"])
+    # subprocess.run(["mv", "temp.txt", "temp.cpp"])
+    # subprocess.run(["make", "temp"])
+    # out = subprocess.run(["./temp"], capture_output=True)
+    # print(out.stdout.decode())
+    app.run(debug=True)
