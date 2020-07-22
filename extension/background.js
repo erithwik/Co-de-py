@@ -1,19 +1,25 @@
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.contextMenus.create({
-        id: "takePicture", // you'll use this in the handler function to identify this context menu item
-        title: 'Take Screenshot',
-        contexts: ['all'],
-    });
-});
+var id = 0;
+chrome.browserAction.onClicked.addListener(function () {
 
-chrome.contextMenus.onClicked.addListener(function (info, tab) {
-    if (info.menuItemId === "takePicture") { // here's where you'll need the ID
-        chrome.tabs.captureVisibleTab(function (dataUrl) {
-            chrome.tabs.create({ 'url': chrome.extension.getURL('picture.html') }, function (currentTab) {
-                chrome.runtime.sendMessage(currentTab, { inputImage: dataUrl }, function (response) {
-                    console.log("finished");
-                })
-            });
-        })
-    }
+    chrome.tabs.captureVisibleTab(function (screenshotUrl) {
+        var viewTabUrl = chrome.extension.getURL('screenshot.html?id=' + id++)
+        var targetId = null;
+        chrome.tabs.onUpdated.addListener(function listener(tabId, changedProps) {
+            if (tabId != targetId || changedProps.status != "complete")
+                return;
+            chrome.tabs.onUpdated.removeListener(listener);
+            var views = chrome.extension.getViews();
+            for (var i = 0; i < views.length; i++) {
+                var view = views[i];
+                if (view.location.href == viewTabUrl) {
+                    view.setScreenshotUrl(screenshotUrl);
+                    break;
+                }
+            }
+        });
+
+        chrome.tabs.create({ url: viewTabUrl }, function (tab) {
+            targetId = tab.id;
+        });
+    });
 });

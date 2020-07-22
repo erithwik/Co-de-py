@@ -3,6 +3,9 @@
     "name": "PhotoCopy",
     "description": "Copies the code (or text) inside a screenshot",
     "version": "0.1",
+    "browser_action": {
+        "default_title": "hello"
+    },
     "background": {
         "scripts": [
             "background.js"
@@ -10,7 +13,6 @@
         "persistent": false
     },
     "permissions": [
-        "contextMenus",
         "tabs",
         "activeTab"
     ]
