@@ -41,14 +41,8 @@ def run_code(code):
     subprocess.run(["make", "temp.cpp"])
     out = subprocess.run(["./temp"], capture_output=True)
     # return the results
-    print(out.stdout)
+    return jsonify({"result": str(output.stdout)})
 
 
 if __name__ == "__main__":
-    # subprocess.run(
-    #     ["tesseract", "temp.png", "temp"])
-    # subprocess.run(["mv", "temp.txt", "temp.cpp"])
-    # subprocess.run(["make", "temp"])
-    # out = subprocess.run(["./temp"], capture_output=True)
-    # print(out.stdout.decode())
     app.run(debug=True)

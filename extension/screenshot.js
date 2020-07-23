@@ -34,9 +34,53 @@ function setScreenshotUrl(url) {
       })
         .then(response => response.json())
         .then(function (data) {
-          console.log(data)
+          redesign(data);
         })
     }
   }
   image.src = url;
+}
+
+function redesign(data) {
+  textAreaInput = document.createElement("textarea");
+  textAreaInput.classList.add("text-1");
+  textAreaInput.id = "text-1";
+  textAreaResults = document.createElement("textarea");
+  textAreaResults.classList.add("text-2");
+  textAreaResults.id = "text-2";
+  textAreaInput.textContent = data["code"];
+
+  holder = document.getElementById("target-holder");
+  holder.innerHTML = ""
+  holder.appendChild(textAreaInput);
+  holder.appendChild(textAreaResults);
+  holder.classList.add("target-holder");
+
+  buttonHolder = document.getElementById("button-holder");
+  buttonHolder.innerHTML = "";
+
+  newButton = document.createElement("button")
+  newButton.id = "code-button";
+  newButton.type = "button";
+  newButton.classList.add("btn");
+  newButton.classList.add("btn-success");
+  newButton.innerText = "Send Code";
+  buttonHolder.appendChild(newButton)
+  buttonHolder.classList.add("vertical-center");
+}
+
+function sendCode() {
+  codeToSend = document.getElementById("text-1").textContent;
+  fetch(`http://localhost:5000/code`, {
+    method: "POST",
+    body: JSON.stringify({ "code": codeToSend }),
+    mode: "cors",
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  }).then(response => response.json())
+    .then(function (data) {
+      resultArea = document.getElementById("text-2");
+      resultArea.innerHTML = data["result"];
+    })
 }
