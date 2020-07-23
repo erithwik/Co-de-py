@@ -77,7 +77,8 @@ function redesign(data) {
 
   var im = CodeMirror.fromTextArea(textAreaInput, {
     theme: "dracula",
-    lineNumbers: true
+    lineNumbers: true,
+    autoCloseBrackets: true
   });
 
   var rm = CodeMirror.fromTextArea(textAreaResults, {
