@@ -28,6 +28,7 @@ textarea {
   height: 90%;
   width: 90%;
   border-radius: 100px;
+  box-shadow: 5px 10px;
 }
 
 .text-1{

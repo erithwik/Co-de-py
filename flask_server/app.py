@@ -21,7 +21,7 @@ def save_text():
         f.write(plain_data)
     # store the text
     output = subprocess.run(
-        ["tesseract", "image." + file_ext, "stdout"], capture_output=True, text=True)
+        ["tesseract", "image." + file_ext, "stdout", "-c", "preserve_interword_spaces=1"], capture_output=True, text=True)
     # return output
     return jsonify({"code": str(output.stdout)})
 

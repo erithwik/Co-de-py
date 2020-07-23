@@ -58,11 +58,11 @@ function redesign(data) {
   saveButton.type = "button";
   codebaseButton.type = "button";
   newButton.classList.add("btn");
-  newButton.classList.add("btn-success");
+  newButton.classList.add("btn-secondary");
   saveButton.classList.add("btn");
-  saveButton.classList.add("btn-info");
+  saveButton.classList.add("btn-secondary");
   codebaseButton.classList.add("btn");
-  codebaseButton.classList.add("btn-primary");
+  codebaseButton.classList.add("btn-secondary");
   newButton.innerText = "Run Code";
   saveButton.innerText = "Save Code";
   codebaseButton.innerText = "View snippets";
@@ -79,7 +79,7 @@ function redesign(data) {
   buttonGroup = document.createElement("div");
   buttonGroup.classList.add("btn-group")
   title = document.createElement("h1");
-  title.innerHTML = "{{ Co(de)py }}"
+  title.innerHTML = "Co(de)py"
   tempDiv.appendChild(title)
   buttonGroup.appendChild(newButton);
   buttonGroup.appendChild(saveButton);
