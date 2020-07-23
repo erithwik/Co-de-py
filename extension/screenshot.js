@@ -17,9 +17,7 @@ function setScreenshotUrl(url) {
     context.msImageSmoothingEnabled = false;
     context.imageSmoothingEnabled = false;
     scaleToFit(canvas, context, image)
-    const cropper = new Cropper(canvas, {
-      crop(event) { },
-    });
+    const cropper = new Cropper(canvas);
     // add a listener here s.t. when enter is clicked, you export it...
     document.getElementById("send-button").onclick = function () {
       data = cropper.getCroppedCanvas().toDataURL('image/png');
@@ -48,7 +46,7 @@ function redesign(data) {
   textAreaResults = document.createElement("textarea");
   textAreaResults.classList.add("text-2");
   textAreaResults.id = "text-2";
-  textAreaInput.textContent = data["code"];
+  textAreaInput.value = data["code"];
 
   holder = document.getElementById("target-holder");
   holder.innerHTML = ""
@@ -60,27 +58,37 @@ function redesign(data) {
   buttonHolder.innerHTML = "";
 
   newButton = document.createElement("button")
+  saveButton = document.createElement("button")
   newButton.id = "code-button";
+  saveButton.id = "save-button";
   newButton.type = "button";
+  saveButton.type = "button";
   newButton.classList.add("btn");
   newButton.classList.add("btn-success");
+  saveButton.classList.add("btn");
+  saveButton.classList.add("btn-info");
   newButton.innerText = "Send Code";
-  buttonHolder.appendChild(newButton)
+  saveButton.innerText = "Save Code";
+  buttonHolder.appendChild(newButton);
+  buttonHolder.appendChild(saveButton);
   buttonHolder.classList.add("vertical-center");
-}
-
-function sendCode() {
-  codeToSend = document.getElementById("text-1").textContent;
-  fetch(`http://localhost:5000/code`, {
-    method: "POST",
-    body: JSON.stringify({ "code": codeToSend }),
-    mode: "cors",
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  }).then(response => response.json())
-    .then(function (data) {
-      resultArea = document.getElementById("text-2");
-      resultArea.innerHTML = data["result"];
-    })
+  newButton.onclick = function () {
+    codeToSend = document.getElementById("text-1").value;
+    fetch(`http://localhost:5000/code`, {
+      method: "POST",
+      body: JSON.stringify({ "code": codeToSend }),
+      mode: "cors",
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    }).then(response => response.json())
+      .then(function (data) {
+        console.log("received")
+        resultArea = document.getElementById("text-2");
+        resultArea.value = data["result"];
+      })
+  };
+  saveButton.onclick = function () {
+    // fill in
+  }
 }

@@ -3,13 +3,7 @@ from flask_cors import CORS
 import sys
 import subprocess
 import base64
-
-# pytesseract.pytesseract.tesseract_cmd = r'/usr/local/Cellar/tesseract/4.1.1'
-
-# custom_config = r'-c preserve_interword_spaces=1 --oem 1 --psm 1 -l eng+ita'
-
-# print(pytesseract.image_to_string(Image.open(
-#     '/Users/ricky/Desktop/test.png'), config=custom_config))
+import time
 
 app = Flask(__name__)
 CORS(app)
@@ -32,16 +26,29 @@ def save_text():
     return jsonify({"code": str(output.stdout)})
 
 
-@ app.route("/code/<code>", methods=["GET"])
-def run_code(code):
+@ app.route("/code", methods=["GET", "POST"])
+def run_code():
     # save the text
-    with open("temp.cpp", "w") as f:
+    text = request.get_json(force=True)
+    text = text["code"]
+    with open("text.cpp", "w") as f:
         f.write(text)
     # run the suprocess and get the output
-    subprocess.run(["make", "temp.cpp"])
-    out = subprocess.run(["./temp"], capture_output=True)
-    # return the results
-    return jsonify({"result": str(output.stdout)})
+    first = subprocess.run(["make", "text"],
+                           capture_output=True, text=True)
+    print(first.stdout, sys.stderr)
+    print(first.stderr, sys.stderr)
+    if(len(first.stderr) > 0):
+        subprocess.run(["rm", "text.cpp"])
+        return jsonify({"result": str(first.stderr)})
+    second = subprocess.run(["./text"], capture_output=True, text=True)
+    if(len(second.stderr) > 0):
+        subprocess.run(["rm", "text.cpp"])
+        subprocess.run(["rm", "text"])
+        return jsonify({"result": str(second.stderr)})
+    subprocess.run(["rm", "text.cpp"])
+    subprocess.run(["rm", "text"])
+    return jsonify({"result": str(second.stdout)})
 
 
 if __name__ == "__main__":
