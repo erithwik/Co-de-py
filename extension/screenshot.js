@@ -89,13 +89,14 @@ function redesign(data) {
   holder.classList.add("target-holder");
 
   var im = CodeMirror.fromTextArea(textAreaInput, {
-    theme: "dracula",
+    theme: "darcula",
     lineNumbers: true,
-    autoCloseBrackets: true
+    autoCloseBrackets: true,
+    mode: "clike"
   });
 
   var rm = CodeMirror.fromTextArea(textAreaResults, {
-    theme: "dracula"
+    theme: "darcula"
   });
 
   buttonHolder = document.getElementById("button-holder");
@@ -147,8 +148,9 @@ function redesign(data) {
           tempTextArea = document.createElement("textarea");
           codebaseSection.appendChild(tempTextArea);
           var tm = CodeMirror.fromTextArea(tempTextArea, {
-            theme: "dracula",
-            lineNumbers: true
+            theme: "darcula",
+            lineNumbers: true,
+            mode: "clike"
           });
           tm.getDoc().setValue(data["result"][i]);
           codebaseSection.appendChild(document.createElement("br"))
