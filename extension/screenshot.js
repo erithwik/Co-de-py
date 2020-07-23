@@ -48,15 +48,6 @@ function redesign(data) {
   textAreaResults.id = "text-2";
   textAreaInput.value = data["code"];
 
-  holder = document.getElementById("target-holder");
-  holder.innerHTML = ""
-  holder.appendChild(textAreaInput);
-  holder.appendChild(textAreaResults);
-  holder.classList.add("target-holder");
-
-  buttonHolder = document.getElementById("button-holder");
-  buttonHolder.innerHTML = "";
-
   newButton = document.createElement("button")
   saveButton = document.createElement("button")
   newButton.id = "code-button";
@@ -67,12 +58,36 @@ function redesign(data) {
   newButton.classList.add("btn-success");
   saveButton.classList.add("btn");
   saveButton.classList.add("btn-info");
-  newButton.innerText = "Send Code";
+  newButton.innerText = "Run Code";
   saveButton.innerText = "Save Code";
-  buttonHolder.appendChild(newButton);
-  buttonHolder.appendChild(saveButton);
-  buttonHolder.classList.add("vertical-center");
+
+  holder = document.getElementById("target-holder");
+  holder.innerHTML = ""
+  holder.appendChild(textAreaInput);
+  tempDiv = document.createElement("div");
+  holder.appendChild(tempDiv);
+  tempDiv.id = "center-div";
+  title = document.createElement("h1");
+  title.innerHTML = "Co(de)py"
+  tempDiv.appendChild(title)
+  tempDiv.appendChild(newButton);
+  tempDiv.appendChild(saveButton);
+  holder.appendChild(textAreaResults);
+  holder.classList.add("target-holder");
+
+  var im = CodeMirror.fromTextArea(textAreaInput, {
+    theme: "dracula",
+    lineNumbers: true
+  });
+
+  var rm = CodeMirror.fromTextArea(textAreaResults, {
+    theme: "dracula"
+  });
+
+  buttonHolder = document.getElementById("button-holder");
+  buttonHolder.innerHTML = "";
   newButton.onclick = function () {
+    im.save();
     codeToSend = document.getElementById("text-1").value;
     fetch(`http://localhost:5000/code`, {
       method: "POST",
@@ -85,7 +100,7 @@ function redesign(data) {
       .then(function (data) {
         console.log("received")
         resultArea = document.getElementById("text-2");
-        resultArea.value = data["result"];
+        rm.getDoc().setValue(data["result"]);
       })
   };
   saveButton.onclick = function () {

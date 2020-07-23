@@ -7,7 +7,17 @@ canvas, img {
 }
 
 .target-holder {
-  padding: 4%;
+  padding: 2%;
+}
+
+#center-div {
+  text-align: center;
+  margin: 1%;
+}
+
+h1 {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
 }
 
 textarea {
@@ -15,31 +25,19 @@ textarea {
   resize: none;
   color: white;
   background-color: black;
-  width: 40%;
   height: 90%;
+  width: 90%;
   border-radius: 10px;
 }
 
 .text-1{
-  float: left;
   font-family: "Courier New", Courier, monospace;
 }
 
 .text-2{
-  float: right;
   font-family: "Courier New", Courier, monospace;
 }
 
 body {
   position: relative;
-}
-
-.vertical-center {
-  margin: 0;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
-  transform: translateX(-50%);
 }
