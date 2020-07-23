@@ -51,5 +51,19 @@ def run_code():
     return jsonify({"result": str(second.stdout)})
 
 
+@app.route("/add", methods=["POST"])
+def add_codebase():
+    text = request.get_json(force=True)
+    text = text["code"]
+    strings.append(text)
+    return jsonify({"result": text})
+
+
+@app.route("/codebase", methods=["GET"])
+def get_codebase():
+    return jsonify({"result": strings})
+
+
 if __name__ == "__main__":
+    strings = []
     app.run(debug=True)

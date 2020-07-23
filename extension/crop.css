@@ -27,7 +27,7 @@ textarea {
   background-color: black;
   height: 90%;
   width: 90%;
-  border-radius: 10px;
+  border-radius: 100px;
 }
 
 .text-1{
@@ -40,4 +40,8 @@ textarea {
 
 body {
   position: relative;
+}
+
+#codebase {
+  padding: 2%;
 }
