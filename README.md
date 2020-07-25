@@ -30,3 +30,4 @@ A Chrome Extension that acts as a companion for learning algorithm design and co
 
 - Integrating with repl.it's API to allow for full cloud integration.
 - Updating the design of the extension
+- Refactoring code for modularity
